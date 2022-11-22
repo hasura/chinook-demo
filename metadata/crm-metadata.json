@@ -1,0 +1,32 @@
+{
+  "resource_version": 19,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "default",
+        "kind": "postgres",
+        "tables": [
+          {
+            "table": {
+              "name": "customers",
+              "schema": "public"
+            }
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "database_url": "",
+            "isolation_level": "read-committed",
+            "use_prepared_statements": false
+          }
+        }
+      }
+    ],
+    "graphql_schema_introspection": {
+      "disabled_for_roles": [
+        "public"
+      ]
+    }
+  }
+}
