@@ -1,4 +1,5 @@
 version: '3.6'
+name: mssql-demo
 services:
   postgres:
     image: postgres
@@ -20,6 +21,16 @@ services:
     restart: always
     healthcheck:
       test: ["CMD", "redis-cli","ping"]
+  mssql:
+    image: mcr.microsoft.com/azure-sql-edge
+    restart: always
+    ports:
+    - "1433:1433"
+    environment:
+      ACCEPT_EULA: 1
+      MSSQL_SA_PASSWORD: Password-123
+    cap_add:
+      - SYS_PTRACE
   hge-orders:
     image: hasura/graphql-engine:latest
     ports:

@@ -1,0 +1,375 @@
+{
+  "resource_version": 21,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "default",
+        "kind": "mssql",
+        "tables": [
+          {
+            "table": {
+              "name": "EmployeeOrgPermissions",
+              "schema": "dbo"
+            }
+          },
+          {
+            "table": {
+              "name": "Employee",
+              "schema": "dbo"
+            },
+            "configuration": {
+              "column_config": {
+                "Address": {
+                  "custom_name": "address"
+                },
+                "BirthDate": {
+                  "custom_name": "birth_date"
+                },
+                "City": {
+                  "custom_name": "city"
+                },
+                "Country": {
+                  "custom_name": "country"
+                },
+                "Email": {
+                  "custom_name": "email"
+                },
+                "EmployeeId": {
+                  "custom_name": "id"
+                },
+                "Fax": {
+                  "custom_name": "fax"
+                },
+                "FirstName": {
+                  "custom_name": "first_name"
+                },
+                "HireDate": {
+                  "custom_name": "hire_date"
+                },
+                "LastName": {
+                  "custom_name": "last_name"
+                },
+                "Phone": {
+                  "custom_name": "phone"
+                },
+                "PostalCode": {
+                  "custom_name": "postal_code"
+                },
+                "ReportsTo": {
+                  "custom_name": "manager_id"
+                },
+                "State": {
+                  "custom_name": "state"
+                },
+                "Title": {
+                  "custom_name": "title"
+                }
+              },
+              "custom_column_names": {},
+              "custom_name": "employees",
+              "custom_root_fields": {}
+            },
+            "object_relationships": [
+              {
+                "name": "manager",
+                "using": {
+                  "foreign_key_constraint_on": "ReportsTo"
+                }
+              }
+            ],
+            "array_relationships": [
+              {
+                "name": "direct_reports",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "ReportsTo",
+                    "table": {
+                      "name": "Employee",
+                      "schema": "dbo"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "hr",
+                "permission": {
+                  "check": {},
+                  "columns": "*"
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {
+                    "EmployeeId": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  }
+                }
+              },
+              {
+                "role": "hr",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              },
+              {
+                "role": "manager",
+                "permission": {
+                  "columns": "*",
+                  "filter": {
+                    "ReportsTo": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  }
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "Address",
+                    "City",
+                    "Country",
+                    "Fax",
+                    "FirstName",
+                    "LastName",
+                    "Phone",
+                    "PostalCode",
+                    "State"
+                  ],
+                  "filter": {
+                    "EmployeeId": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  },
+                  "check": null
+                }
+              },
+              {
+                "role": "hr",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "hr",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ],
+            "event_triggers": [
+              {
+                "name": "goodbye",
+                "definition": {
+                  "delete": {
+                    "columns": "*"
+                  },
+                  "enable_manual": true
+                },
+                "retry_conf": {
+                  "interval_sec": 10,
+                  "num_retries": 0,
+                  "timeout_sec": 60
+                },
+                "webhook": "https://api.sendgrid.com",
+                "headers": [
+                  {
+                    "name": "Authorization",
+                    "value_from_env": "SENDGRID_API_KEY_HEADER"
+                  }
+                ],
+                "request_transform": {
+                  "body": "{\n  \"personalizations\":\n   [\n     {\n       \"from\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n       \"to\":\n         [\n           {\n             \"email\": {{ $body.event.data.old.email }},\n             \"name\": \"{{ $body.event.data.old.first_name }} {{ $body.event.data.old.last_name }}\"\n           }\n         ]\n     }\n   ],\n  \"from\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n  \"reply_to\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n  \"subject\": \"Goodbye\",\n  \"content\":\n    [\n      {\n        \"type\": \"text/html\",\n        \"value\": \"<p>Goodbye {{ $body.event.data.old.first_name }} we are sad to see you leave!</p><p>We wish you the best in your next chapter!</p>\"\n      }\n    ]\n}",
+                  "method": "POST",
+                  "query_params": {},
+                  "template_engine": "Kriti",
+                  "url": "{{$base_url}}/v3/mail/send",
+                  "version": 1
+                }
+              },
+              {
+                "name": "welcome",
+                "definition": {
+                  "enable_manual": true,
+                  "insert": {
+                    "columns": "*"
+                  }
+                },
+                "retry_conf": {
+                  "interval_sec": 10,
+                  "num_retries": 0,
+                  "timeout_sec": 60
+                },
+                "webhook": "https://api.sendgrid.com",
+                "headers": [
+                  {
+                    "name": "Authorization",
+                    "value_from_env": "SENDGRID_API_KEY_HEADER"
+                  }
+                ],
+                "request_transform": {
+                  "body": {
+                    "action": "transform",
+                    "template": "{\n  \"personalizations\":\n   [\n     {\n       \"from\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n       \"to\":\n         [\n           {\n             \"email\": \"{{ $body.event.data.new.email }}\",\n             \"name\": \"{{ $body.event.data.new.first_name }} {{ $body.event.data.new.last_name }}\"\n           }\n         ]\n     }\n   ],\n  \"from\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n  \"reply_to\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n  \"subject\": \"Welcome!\",\n  \"content\":\n    [\n      {\n        \"type\": \"text/html\",\n        \"value\": \"<p>{{ $body.event.data.new.first_name }}, welcome to Team Chinook!</p>\"\n      }\n    ]\n}"
+                  },
+                  "method": "POST",
+                  "query_params": {},
+                  "template_engine": "Kriti",
+                  "url": "{{$base_url}}/v3/mail/send",
+                  "version": 2
+                }
+              }
+            ]
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "connection_string": "Driver={ODBC Driver 18 for SQL Server};server=mssql,1433;database=chinook_corp;uid=sa;pwd=Password-123;encrypt=optional;",
+            "pool_settings": {
+              "idle_timeout": 5,
+              "max_connections": null,
+              "total_max_connections": null
+            }
+          }
+        },
+        "customization": {
+          "naming_convention": "hasura-default"
+        }
+      }
+    ],
+    "query_collections": [
+      {
+        "name": "allowed-queries",
+        "definition": {
+          "queries": [
+            {
+              "name": "Get All Employees",
+              "query": "query GetAllEmployees {\n\temployees {\n\t\tid\n\t\tfirst_name\n\t\tlast_name\n\t\ttitle\n\t}\n}\n"
+            },
+            {
+              "name": "Add Employee",
+              "query": "mutation AddEmployee ($employee: employees_insert_input!) {\n\temployee: insert_employees_one(object: $employee) {\n\t\tid\n\t}\n}\n"
+            },
+            {
+              "name": "Update Employee",
+              "query": "mutation UpdateEmployee ($id: Int!, $employee: employees_set_input!) {\n\temployee: update_employees_by_pk(pk_columns: {id:$id}, _set: $employee) {\n\t\tid\n\t}\n}\n"
+            },
+            {
+              "name": "Get Employee",
+              "query": "query GetEmployee ($id: Int!) {\n\temployee: employees_by_pk(id: $id) {\n\t\tid\n\t\tfirst_name\n\t\tlast_name\n\t\ttitle\n\t\temail\n\t\tphone\n\t\tfax\n\t\tbirth_date\n\t\taddress\n\t\tcity\n\t\tstate\n\t\tcountry\n\t\tpostal_code\n\t\thire_date\n\t\tmanager_id\n\t}\n}\n"
+            },
+            {
+              "name": "Delete Employee",
+              "query": "mutation DeleteEmployee ($id: Int!) {\n\temployee: delete_employees_by_pk(id: $id) {\n\t\tid\n\t}\n}\n"
+            }
+          ]
+        }
+      }
+    ],
+    "allowlist": [
+      {
+        "collection": "allowed-queries",
+        "scope": {
+          "global": true
+        }
+      }
+    ],
+    "rest_endpoints": [
+      {
+        "comment": "Summary list of employees",
+        "definition": {
+          "query": {
+            "collection_name": "allowed-queries",
+            "query_name": "Get All Employees"
+          }
+        },
+        "methods": [
+          "GET"
+        ],
+        "name": "Get All Employees",
+        "url": "employees"
+      },
+      {
+        "comment": "Add 1 employee",
+        "definition": {
+          "query": {
+            "collection_name": "allowed-queries",
+            "query_name": "Add Employee"
+          }
+        },
+        "methods": [
+          "POST"
+        ],
+        "name": "Add Employee",
+        "url": "employees"
+      },
+      {
+        "comment": "Update an employee by ID",
+        "definition": {
+          "query": {
+            "collection_name": "allowed-queries",
+            "query_name": "Update Employee"
+          }
+        },
+        "methods": [
+          "PUT"
+        ],
+        "name": "Update Employee",
+        "url": "employees/:id"
+      },
+      {
+        "comment": "Get employee by ID",
+        "definition": {
+          "query": {
+            "collection_name": "allowed-queries",
+            "query_name": "Get Employee"
+          }
+        },
+        "methods": [
+          "GET"
+        ],
+        "name": "Get Employee",
+        "url": "employees/:id"
+      },
+      {
+        "comment": "Delete an employee by ID",
+        "definition": {
+          "query": {
+            "collection_name": "allowed-queries",
+            "query_name": "Delete Employee"
+          }
+        },
+        "methods": [
+          "DELETE"
+        ],
+        "name": "Delete Employee",
+        "url": "employees/:id"
+      }
+    ],
+    "inherited_roles": [
+      {
+        "role_name": "emp_mgr",
+        "role_set": [
+          "employee",
+          "manager"
+        ]
+      }
+    ]
+  }
+}

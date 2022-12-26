@@ -1,0 +1,117 @@
+{
+  "resource_version": 19,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "default",
+        "kind": "mssql",
+        "tables": [
+          {
+            "table": {
+              "name": "Invoice",
+              "schema": "dbo"
+            },
+            "configuration": {
+              "column_config": {
+                "BillingAddress": {
+                  "custom_name": "billing_address"
+                },
+                "BillingCity": {
+                  "custom_name": "billing_city"
+                },
+                "BillingCountry": {
+                  "custom_name": "billing_country"
+                },
+                "BillingPostalCode": {
+                  "custom_name": "billing_postal_code"
+                },
+                "BillingState": {
+                  "custom_name": "billing_state"
+                },
+                "CustomerId": {
+                  "custom_name": "customer_id"
+                },
+                "InvoiceDate": {
+                  "custom_name": "invoice_date"
+                },
+                "InvoiceId": {
+                  "custom_name": "id"
+                },
+                "Total": {
+                  "custom_name": "total"
+                }
+              },
+              "custom_column_names": {},
+              "custom_name": "invoices",
+              "custom_root_fields": {}
+            },
+            "array_relationships": [
+              {
+                "name": "invoice_lines",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "InvoiceId",
+                    "table": {
+                      "name": "InvoiceLine",
+                      "schema": "dbo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "InvoiceLine",
+              "schema": "dbo"
+            },
+            "configuration": {
+              "column_config": {
+                "InvoiceId": {
+                  "custom_name": "invoice_id"
+                },
+                "InvoiceLineId": {
+                  "custom_name": "id"
+                },
+                "Quantity": {
+                  "custom_name": "quantity"
+                },
+                "TrackId": {
+                  "custom_name": "track_id"
+                },
+                "UnitPrice": {
+                  "custom_name": "unit_price"
+                }
+              },
+              "custom_column_names": {},
+              "custom_name": "invoice_lines",
+              "custom_root_fields": {}
+            },
+            "object_relationships": [
+              {
+                "name": "invoice",
+                "using": {
+                  "foreign_key_constraint_on": "InvoiceId"
+                }
+              }
+            ]
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "connection_string": "Driver={ODBC Driver 18 for SQL Server};server=mssql,1433;database=chinook_corp;uid=sa;pwd=Password-123;encrypt=optional;",
+            "pool_settings": {
+              "idle_timeout": 5,
+              "max_connections": null,
+              "total_max_connections": null
+            }
+          }
+        },
+        "customization": {
+          "naming_convention": "hasura-default"
+        }
+      }
+    ]
+  }
+}

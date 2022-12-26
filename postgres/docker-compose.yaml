@@ -1,0 +1,169 @@
+version: '3.6'
+name: pg-demo
+services:
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+    - "5432:5432"
+    volumes:
+    - db_data:/var/lib/postgresql/data
+    - ./data-init/pg/:/docker-entrypoint-initdb.d/
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+    healthcheck:
+      test: "pg_isready -q -h postgres"
+      interval: 10s
+      timeout: 5s
+      retries: 30
+  redis:
+    image: redis
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+  hge-orders:
+    image: hasura/graphql-engine:latest
+    ports:
+    - "8014:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+    environment:
+      HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      ## The metadata database for this Hasura GraphQL project. Can be changed to a managed postgres instance
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/hge_metadata_orders
+      HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT: 30
+      ## Optional settings:
+      HASURA_GRAPHQL_REDIS_URL: redis://redis:6379
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: true
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: true
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
+      HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
+    healthcheck:
+      test: bash -c ':> /dev/tcp/0.0.0.0/8080' || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  hge-crm:
+    image: hasura/graphql-engine:latest
+    ports:
+    - "8013:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+    environment:
+      HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      ## The metadata database for this Hasura GraphQL project. Can be changed to a managed postgres instance
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/hge_metadata_crm
+      HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT: 30
+      ## Optional settings:
+      HASURA_GRAPHQL_REDIS_URL: redis://redis:6379
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: true
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: true
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
+      HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
+    healthcheck:
+      test: bash -c ':> /dev/tcp/0.0.0.0/8080' || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  hge-hr:
+    image: hasura/graphql-engine:latest
+    ports:
+    - "8012:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+    environment:
+      HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      ## The metadata database for this Hasura GraphQL project. Can be changed to a managed postgres instance
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/hge_metadata_hr
+      HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT: 30
+     ## Optional settings:
+      HASURA_GRAPHQL_REDIS_URL: redis://redis:6379
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: true
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: true
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
+      HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
+      SENDGRID_API_KEY_HEADER: Bearer ${SENDGRID_API_KEY_HEADER}
+    healthcheck:
+      test: bash -c ':> /dev/tcp/0.0.0.0/8080' || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  hge-main:
+    image: hasura/graphql-engine:latest
+    ports:
+    - "8011:8080"
+    depends_on:
+      postgres:
+          condition: service_healthy
+      redis:
+        condition: service_healthy
+      hge-orders:
+          condition: service_healthy
+      hge-crm:
+          condition: service_healthy
+    restart: always
+    environment:
+      HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      ## The metadata database for this Hasura GraphQL project. Can be changed to a managed postgres instance
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/hge_metadata_main
+      HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT: 30
+      ## Optional setting
+      HASURA_GRAPHQL_REDIS_URL: redis://redis:6379
+      HASURA_GRAPHQL_JWT_SECRET: |
+        {
+          "claims_namespace": "sessionvars",
+          "key": "hasura-hs384-secret-tKc*ruT!Rt.NR8!osNsKqCyzXTDtZ*8kUxg",
+          "claims_map": {
+            "x-hasura-allowed-roles": {
+              "path": "$$.allowed-roles"
+            },
+            "x-hasura-default-role": {
+              "path": "$$.allowed-roles[0]"
+            },
+            "x-hasura-user-id": {
+              "path": "$$.uid"
+            }
+          },
+          "type": "HS384"
+        }
+      HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS: true
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: true
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: true
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
+      HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
+    healthcheck:
+      test: bash -c ':> /dev/tcp/0.0.0.0/8080' || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+volumes:
+  db_data:
