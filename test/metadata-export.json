@@ -1,1 +1,0 @@
-{"resource_version":41,"metadata":{"version":3,"sources":[{"name":"test","kind":"postgres","tables":[],"configuration":{"connection_info":{"database_url":{"from_env":"DB_URL"},"isolation_level":"read-committed","use_prepared_statements":false}},"customization":{"naming_convention":"hasura-default"}}]}}
