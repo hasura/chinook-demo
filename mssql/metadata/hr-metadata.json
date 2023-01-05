@@ -90,6 +90,21 @@
                     }
                   }
                 }
+              },
+              {
+                "name": "org_permissions",
+                "using": {
+                  "manual_configuration": {
+                    "column_mapping": {
+                      "EmployeeId": "EmployeeId"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "EmployeeOrgPermissions",
+                      "schema": "public"
+                    }
+                  }
+                }
               }
             ],
             "insert_permissions": [
@@ -131,7 +146,20 @@
                     }
                   }
                 }
-              }
+              },
+              {
+                "role": "org_leader",
+                "permission": {
+                  "columns": "*",
+                  "filter": {
+                    "org_permissions": {
+                      "OrgLeaderId": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
+                    }
+                  }
+                }
+            }
             ],
             "update_permissions": [
               {
@@ -368,6 +396,13 @@
         "role_set": [
           "employee",
           "manager"
+        ]
+      },
+      {
+        "role_name": "emp_org_ldr",
+        "role_set": [
+          "employee",
+          "org_leader"
         ]
       }
     ]

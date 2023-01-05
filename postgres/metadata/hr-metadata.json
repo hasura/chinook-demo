@@ -38,6 +38,21 @@
                     }
                   }
                 }
+              },
+              {
+                "name": "org_permissions",
+                "using": {
+                  "manual_configuration": {
+                    "column_mapping": {
+                      "id": "employee_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "employee_org_permissions",
+                      "schema": "public"
+                    }
+                  }
+                }
               }
             ],
             "insert_permissions": [
@@ -147,45 +162,11 @@
               {
                 "role": "org_leader",
                 "permission": {
-                  "columns": [
-                    "address",
-                    "city",
-                    "country",
-                    "email",
-                    "fax",
-                    "first_name",
-                    "last_name",
-                    "phone",
-                    "postal_code",
-                    "state",
-                    "title",
-                    "id",
-                    "manager_id",
-                    "birth_date",
-                    "hire_date"
-                  ],
+                  "columns": "*",
                   "filter": {
-                    "_exists": {
-                      "_table": {
-                        "name": "employee_org_permissions",
-                        "schema": "public"
-                      },
-                      "_where": {
-                        "_and": [
-                          {
-                            "org_leader_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          },
-                          {
-                            "employee_id": {
-                              "_ceq": [
-                                "$",
-                                "id"
-                              ]
-                            }
-                          }
-                        ]
+                    "org_permissions": {
+                      "org_leader_id": {
+                        "_eq": "X-Hasura-User-Id"
                       }
                     }
                   }
