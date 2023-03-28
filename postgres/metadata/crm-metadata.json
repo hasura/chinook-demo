@@ -16,7 +16,7 @@
         ],
         "configuration": {
           "connection_info": {
-            "database_url": "",
+            "database_url": "postgres://postgres:postgrespassword@postgres:5432/chinook_corp",
             "isolation_level": "read-committed",
             "use_prepared_statements": false
           }

@@ -29,6 +29,11 @@ CREATE TABLE public.artists (
     name character varying(120)
 );
 
+CREATE OR REPLACE FUNCTION public.custom_sql_artists()
+RETURNS SETOF artists AS $$
+  SELECT * FROM artists;
+$$ LANGUAGE sql STABLE;
+
 DROP SEQUENCE IF EXISTS public.genres_id_seq CASCADE;
 CREATE SEQUENCE public.genres_id_seq
     START WITH 25
