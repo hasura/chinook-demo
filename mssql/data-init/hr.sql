@@ -39,47 +39,6 @@ ALTER TABLE [dbo].[Employee] ADD CONSTRAINT [FK_EmployeeReportsTo]
 CREATE INDEX [IFK_EmployeeReportsTo] ON [dbo].[Employee] ([ReportsTo]);
 
 
-CREATE VIEW [dbo].[EmployeeOrgPermissions] AS
-WITH org AS (
-    SELECT
-        [ReportsTo] as [OrgLeaderId],
-        [EmployeeId] as [EmployeeId]
-    FROM
-        [dbo].[Employee]
-    WHERE
-        [EmployeeId] IN (
-            SELECT
-                DISTINCT([EmployeeId])
-            FROM
-                [dbo].[Employee]
-            WHERE [ReportsTo] IS NOT NULL
-        )
-    UNION ALL
-        SELECT
-            [OrgLeaderId],
-            e.[EmployeeId] as [EmployeeId]
-        FROM
-            [dbo].[Employee] e
-        INNER JOIN org o ON o.[EmployeeId] = e.[ReportsTo]
-) SELECT
-    *
-FROM
-   org
-UNION
-SELECT
-    [AdHocManagerId] as [OrgLeaderId],
-    [EmployeeId]
-FROM [dbo].[AdHocManager]
-WHERE [AppliesToOrg] = 0
-UNION
-SELECT
-    ahm.[AdHocManagerId] as [OrgLeaderId],
-    o.[EmployeeId]
-FROM [dbo].[AdHocManager] ahm
-INNER JOIN org o ON o.[OrgLeaderId] = ahm.[EmployeeId]
-WHERE [AppliesToOrg] = 1;
-
-
 SET IDENTITY_INSERT [dbo].[Employee] ON;
 INSERT INTO [dbo].[Employee] ([EmployeeId], [LastName], [FirstName], [Title], [BirthDate], [HireDate], [Address], [City], [State], [Country], [PostalCode], [Phone], [Fax], [Email]) VALUES (1, N'Adams', N'Andrew', N'General Manager', '1962/2/18', '2002/8/14', N'11120 Jasper Ave NW', N'Edmonton', N'AB', N'Canada', N'T5K 2N1', N'+1 (780) 428-9482', N'+1 (780) 428-3457', N'andrew@chinookcorp.com');
 INSERT INTO [dbo].[Employee] ([EmployeeId], [LastName], [FirstName], [Title], [ReportsTo], [BirthDate], [HireDate], [Address], [City], [State], [Country], [PostalCode], [Phone], [Fax], [Email]) VALUES (2, N'Edwards', N'Nancy', N'Sales Manager', 1, '1958/12/8', '2002/5/1', N'825 8 Ave SW', N'Calgary', N'AB', N'Canada', N'T2P 2T3', N'+1 (403) 262-3443', N'+1 (403) 262-3322', N'nancy@chinookcorp.com');

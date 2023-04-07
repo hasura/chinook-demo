@@ -101,7 +101,7 @@
                     "insertion_order": null,
                     "remote_table": {
                       "name": "EmployeeOrgPermissions",
-                      "schema": "public"
+                      "schema": "dbo"
                     }
                   }
                 }
@@ -219,7 +219,7 @@
                 "headers": [
                   {
                     "name": "Authorization",
-                    "value_from_env": "SENDGRID_API_KEY_HEADER"
+                    "value": "Bearer SecretAPIKey"
                   }
                 ],
                 "request_transform": {
@@ -248,7 +248,7 @@
                 "headers": [
                   {
                     "name": "Authorization",
-                    "value_from_env": "SENDGRID_API_KEY_HEADER"
+                    "value": "Bearer SecretAPIKey"
                   }
                 ],
                 "request_transform": {

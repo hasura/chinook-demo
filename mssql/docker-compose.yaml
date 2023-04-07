@@ -4,8 +4,6 @@ services:
   postgres:
     image: postgres
     restart: always
-    ports:
-    - "5432:5432"
     volumes:
     - db_data:/var/lib/postgresql/data
     - ./data-init/pg/:/docker-entrypoint-initdb.d/
@@ -31,10 +29,69 @@ services:
       MSSQL_SA_PASSWORD: Password-123
     cap_add:
       - SYS_PTRACE
+  devices:
+    image: chinook-devices
+    build: ../services/devices
+    ports:
+    - "7017:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    environment:
+      - SERVICE_PORT=8080
+      - PG_DB_URL=postgres://postgres:postgrespassword@postgres:5432/chinook_corp?sslmode=disable
+    #healthcheck:
+    #  test: ["CMD", "curl","http://localhost:8080/devices"]
+  orders:
+    image: chinook-orders
+    build: ../services/orders
+    ports:
+    - "7016:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    environment:
+      - SERVICE_PORT=8080
+      - PG_DB_URL=postgres://postgres:postgrespassword@postgres:5432/chinook_corp?sslmode=disable
+    #healthcheck:
+    #  test: ["CMD", "curl","http://localhost:8080/invoices"]
+  hge-devices:
+    image: hasura/graphql-engine:latest
+    ports:
+    - "7015:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+    environment:
+      HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      ## The metadata database for this Hasura GraphQL project. Can be changed to a managed postgres instance
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/hge_metadata_devices
+      HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT: 30
+      ## Optional settings:
+      HASURA_GRAPHQL_REDIS_URL: redis://redis:6379
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: true
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: true
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLED_APIS: metadata,graphql,config,metrics
+      HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
+      HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
+    healthcheck:
+      test: bash -c ':> /dev/tcp/0.0.0.0/8080' || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
   hge-orders:
     image: hasura/graphql-engine:latest
     ports:
-    - "8014:8080"
+    - "7014:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -64,7 +121,7 @@ services:
   hge-crm:
     image: hasura/graphql-engine:latest
     ports:
-    - "8013:8080"
+    - "7013:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -94,7 +151,7 @@ services:
   hge-hr:
     image: hasura/graphql-engine:latest
     ports:
-    - "8012:8080"
+    - "7012:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -125,7 +182,7 @@ services:
   hge-main:
     image: hasura/graphql-engine:latest
     ports:
-    - "8011:8080"
+    - "7011:8080"
     depends_on:
       postgres:
           condition: service_healthy
