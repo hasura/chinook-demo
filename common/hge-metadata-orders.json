@@ -1,0 +1,206 @@
+{
+  "resource_version": 12,
+  "metadata": {
+    "version": 3,
+    "sources": [],
+    "actions": [
+      {
+        "name": "getInvoiceById",
+        "definition": {
+          "handler": "http://orders:8080",
+          "output_type": "Invoice",
+          "forward_client_headers": true,
+          "arguments": [
+            {
+              "name": "invoiceId",
+              "type": "Int!"
+            }
+          ],
+          "request_transform": {
+            "method": "GET",
+            "query_params": {},
+            "request_headers": {
+              "add_headers": {},
+              "remove_headers": [
+                "content-type"
+              ]
+            },
+            "template_engine": "Kriti",
+            "url": "{{$base_url}}/invoices/{{$body.input.invoiceId}}",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{\n  \"id\": {{$body?.Id}},\n  \"customerId\": {{$body?.CustomerId}},\n  \"deviceId\": {{$body?.DeviceId}},\n  \"invoiceDate\": {{$body?.InvoiceDate}},\n  \"billingAddress\": {{$body?.BillingAddress}},\n  \"billingCity\": {{$body?.BillingCity}},\n  \"billingState\": {{$body?.BillingState}},\n  \"billingCountry\": {{$body?.BillingCountry}},\n  \"billingPostalCode\": {{$body?.BillingPostalCode}},\n  \"total\": {{$body?.Total}}\n}"
+            },
+            "template_engine": "Kriti",
+            "version": 2
+          },
+          "type": "query"
+        },
+        "comment": "Get a single invoice using the invoice ID."
+      },
+      {
+        "name": "getInvoiceLines",
+        "definition": {
+          "handler": "http://orders:8080",
+          "output_type": "[InvoiceLine]",
+          "forward_client_headers": true,
+          "arguments": [
+            {
+              "name": "invoiceId",
+              "type": "Int!"
+            }
+          ],
+          "request_transform": {
+            "method": "GET",
+            "query_params": {},
+            "request_headers": {
+              "add_headers": {},
+              "remove_headers": [
+                "content-type"
+              ]
+            },
+            "template_engine": "Kriti",
+            "url": "{{$base_url}}/invoices/{{$body.input.invoiceId}}/lines",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{{if inverse(empty($body))}} {{ range _, item := $body}} {\n  \"id\": {{item?.Id}},\n  \"invoiceId\": {{item?.InvoiceId}},\n  \"trackId\": {{item?.TrackId}},\n  \"unitPrice\": {{item?.UnitPrice}},\n  \"quantity\": {{item?.Quantity}}\n  } {{end}} {{else}} null {{end}}"
+            },
+            "template_engine": "Kriti",
+            "version": 2
+          },
+          "type": "query"
+        },
+        "comment": "Get all the invoice lines using the invoice id."
+      },
+      {
+        "name": "getInvoices",
+        "definition": {
+          "handler": "http://orders:8080",
+          "output_type": "[Invoice]",
+          "forward_client_headers": true,
+          "arguments": [
+            {
+              "name": "customerId",
+              "type": "Int"
+            },
+            {
+              "name": "limit",
+              "type": "Int"
+            },
+            {
+              "name": "offset",
+              "type": "Int"
+            }
+          ],
+          "request_transform": {
+            "method": "GET",
+            "query_params": {
+              "customerId": "{{$body.input?.customerId}}",
+              "limit": "{{$body.input?.limit}}",
+              "offset": "{{$body.input?.offset}}"
+            },
+            "request_headers": {
+              "add_headers": {},
+              "remove_headers": [
+                "content-type"
+              ]
+            },
+            "template_engine": "Kriti",
+            "url": "{{$base_url}}/invoices",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{{if inverse(empty($body))}} {{ range _, item := $body}} {\n  \"id\": {{item?.Id}},\n  \"customerId\": {{item?.CustomerId}},\n  \"deviceId\": {{item?.DeviceId}},\n  \"invoiceDate\": {{item?.InvoiceDate}},\n  \"billingAddress\": {{item?.BillingAddress}},\n  \"billingCity\": {{item?.BillingCity}},\n  \"billingState\": {{item?.BillingState}},\n  \"billingCountry\": {{item?.BillingCountry}},\n  \"billingPostalCode\": {{item?.BillingPostalCode}},\n  \"total\": {{item?.Total}}\n  } {{end}} {{else}} null {{end}}"
+            },
+            "template_engine": "Kriti",
+            "version": 2
+          },
+          "type": "query"
+        },
+        "comment": "Get a set of invoices. Can be paginated"
+      }
+    ],
+    "custom_types": {
+      "objects": [
+        {
+          "name": "Invoice",
+          "fields": [
+            {
+              "name": "billingAddress",
+              "type": "String"
+            },
+            {
+              "name": "billingCity",
+              "type": "String"
+            },
+            {
+              "name": "billingCountry",
+              "type": "String"
+            },
+            {
+              "name": "billingPostalCode",
+              "type": "String"
+            },
+            {
+              "name": "billingState",
+              "type": "String"
+            },
+            {
+              "name": "customerId",
+              "type": "Int!"
+            },
+            {
+              "name": "deviceId",
+              "type": "String!"
+            },
+            {
+              "name": "id",
+              "type": "Int!"
+            },
+            {
+              "name": "invoiceDate",
+              "type": "String!"
+            },
+            {
+              "name": "total",
+              "type": "Float!"
+            }
+          ]
+        },
+        {
+          "name": "InvoiceLine",
+          "fields": [
+            {
+              "name": "id",
+              "type": "Int!"
+            },
+            {
+              "name": "invoiceId",
+              "type": "Int!"
+            },
+            {
+              "name": "quantity",
+              "type": "Int!"
+            },
+            {
+              "name": "trackId",
+              "type": "Int!"
+            },
+            {
+              "name": "unitPrice",
+              "type": "Int!"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

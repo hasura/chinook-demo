@@ -1,0 +1,118 @@
+{
+  "resource_version": 4,
+  "metadata": {
+    "version": 3,
+    "sources": [],
+    "actions": [
+      {
+        "name": "getDevices",
+        "definition": {
+          "handler": "http://devices:8080",
+          "output_type": "[Device]",
+          "forward_client_headers": true,
+          "arguments": [
+            {
+              "name": "customerId",
+              "type": "Int"
+            },
+            {
+              "name": "limit",
+              "type": "Int"
+            },
+            {
+              "name": "offset",
+              "type": "Int"
+            }
+          ],
+          "request_transform": {
+            "method": "GET",
+            "query_params": {
+              "customerId": "{{$body.input?.customerId}}",
+              "limit": "{{$body.input?.limit}}",
+              "offset": "{{$body.input?.offset}}"
+            },
+            "request_headers": {
+              "add_headers": {},
+              "remove_headers": [
+                "content-type"
+              ]
+            },
+            "template_engine": "Kriti",
+            "url": "{{$base_url}}/devices",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{{if inverse(empty($body))}} {{ range _, item := $body}} {\n  \"guid\": {{item?.Guid}},\n  \"customerId\": {{item?.CustomerId}},\n  \"model\": {{item?.Model}},\n  \"name\": {{item?.Name}},\n  \"description\": {{item?.Description}}\n  } {{end}} {{else}} null {{end}}"
+            },
+            "template_engine": "Kriti",
+            "version": 2
+          },
+          "type": "query"
+        },
+        "comment": "Get a set of devices. Can be paginated"
+      },
+      {
+        "name": "getDevicesById",
+        "definition": {
+          "handler": "http://devices:8080",
+          "output_type": "Device",
+          "forward_client_headers": true,
+          "arguments": [
+            {
+              "name": "deviceId",
+              "type": "String!"
+            }
+          ],
+          "request_transform": {
+            "method": "GET",
+            "query_params": {},
+            "template_engine": "Kriti",
+            "url": "{{$base_url}}/devices/{{$body.input.deviceId}}",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{\n  \"guid\": {{$body?.Guid}},\n  \"customerId\": {{$body?.CustomerId}},\n  \"model\": {{$body?.Model}},\n  \"name\": {{$body?.Name}},\n  \"description\": {{$body?.Description}}\n}"
+            },
+            "template_engine": "Kriti",
+            "version": 2
+          },
+          "type": "query"
+        },
+        "comment": "Get a single device using the invoice ID."
+      }
+    ],
+    "custom_types": {
+      "objects": [
+        {
+          "name": "Device",
+          "fields": [
+            {
+              "name": "customerId",
+              "type": "Int!"
+            },
+            {
+              "name": "description",
+              "type": "String"
+            },
+            {
+              "name": "guid",
+              "type": "String!"
+            },
+            {
+              "name": "model",
+              "type": "String!"
+            },
+            {
+              "name": "name",
+              "type": "String!"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,536 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "schemas": {
+      "ValidateErrorJSON": {
+        "description": "A validation error",
+        "properties": {
+          "message": {
+            "type": "string",
+            "enum": [
+              "Validation failed"
+            ],
+            "nullable": false
+          },
+          "details": {
+            "properties": {},
+            "additionalProperties": {},
+            "type": "object"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "NotFoundError": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "stack": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "message"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "InvoiceLine": {
+        "properties": {
+          "Id": {
+			      "type": "integer",
+			      "format": "int32"
+		      },
+          "InvoiceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrackId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "UnitPrice": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Quantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "Id",
+          "InvoiceId",
+          "TrackId",
+          "UnitPrice",
+          "Quantity"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Invoice": {
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CustomerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DeviceId": {
+            "type": "string"
+            },
+          "InvoiceDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "BillingAddress": {
+            "type": "string"
+          },
+          "BillingCity": {
+            "type": "string"
+          },
+          "BillingState": {
+            "type": "string"
+          },
+          "BillingCountry": {
+            "type": "string"
+          },
+          "BillingPostalCode": {
+            "type": "string"
+          },
+          "Total": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "required": [
+          "Id",
+          "CustomerId",
+          "InvoiceDate",
+          "Total"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "InvoiceLineInsert": {
+        "description": "Invoice Line Insert",
+        "properties": {
+          "TrackId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "UnitPrice": {
+            "type": "number",
+            "format": "float"
+          },
+          "Quantity": {
+			      "type": "integer",
+			      "format": "int32"
+		      }
+        },
+        "required": [
+          "TrackId",
+          "UnitPrice",
+          "Quantity"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "InvoiceInsert": {
+        "description": "Invoice Insert",
+        "properties": {
+          "CustomerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "InvoiceDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "BillingAddress": {
+            "type": "string"
+          },
+          "BillingCity": {
+            "type": "string"
+          },
+          "BillingState": {
+            "type": "string"
+          },
+          "BillingCountry": {
+            "type": "string"
+          },
+          "BillingPostalCode": {
+            "type": "string"
+          },
+          "Total": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "required": [
+          "CustomerId",
+          "InvoiceDate",
+          "Total"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {}
+  },
+  "info": {
+    "title": "Orders micro service",
+    "version": "0.7.0",
+    "description": "Orders micro service using the Chinook database",
+    "license": {
+      "name": "ISC"
+    },
+    "contact": {
+      "name": "Chris Toth"
+    }
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/invoices": {
+      "get": {
+        "operationId": "getInvoices",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Invoice"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get a set of invoices. Can be paginated",
+        "tags": [
+          "Invoice"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "Filter results by specified customer id",
+            "in": "query",
+            "name": "customerId",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "how many records should be returned",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "description": "how many records to offset by",
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "insertInvoice",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Invoice"
+                }
+              }
+            }
+          }
+        },
+        "description": "Create an invoice. Returns the created invoice.",
+        "tags": [
+          "Invoice"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "Request Body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvoiceInsert",
+                "description": "Request Body"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/invoices/{invoiceId}": {
+      "get": {
+        "operationId": "getInvoiceById",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Invoice"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateErrorJSON"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get a single invoice using the invoice ID.",
+        "tags": [
+          "Invoice"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "invoice id",
+            "in": "path",
+            "name": "invoiceId",
+            "required": true,
+            "schema": {
+			  "type": "integer",
+			  "format": "int32"
+			}
+          }
+        ]
+      },
+      "put": {
+        "operationId": "updateInvoice",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Invoice"
+                }
+              }
+            }
+          }
+        },
+        "description": "Update an invoice. Returns the updated invoice.",
+        "tags": [
+          "Invoice"
+        ],
+        "security": [],
+        "parameters": [
+			{
+			  "description": "invoice id",
+			  "in": "path",
+			  "name": "invoiceId",
+			  "required": true,
+			  "schema": {
+				"type": "integer",
+				"format": "int32"
+			  }
+			}
+		],
+		"requestBody": {
+          "description": "Request Body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvoiceInsert",
+                "description": "Request Body"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteInvoice",
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        },
+        "description": "Delete an invoice.",
+        "tags": [
+          "Invoice"
+        ],
+        "security": [],
+        "parameters": [
+			{
+			  "description": "invoice id",
+			  "in": "path",
+			  "name": "invoiceId",
+			  "required": true,
+			  "schema": {
+				"type": "integer",
+				"format": "int32"
+			  }
+			}
+		]
+      }
+    },
+    "/invoices/{invoiceId}/lines": {
+      "get": {
+        "operationId": "getInvoiceLines",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/InvoiceLine"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateErrorJSON"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get all the invoice lines using the invoice id.",
+        "tags": [
+          "InvoiceLine"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "invoice id",
+            "in": "path",
+            "name": "invoiceId",
+            "required": true,
+            "schema": {
+				"type": "integer",
+				"format": "int32"
+			}
+          }
+        ]
+      },
+      "post": {
+        "operationId": "InsertInvoiceLine",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceLine"
+                }
+              }
+            }
+          }
+        },
+        "description": "Create a new invoice line. Returns the created invoice line.",
+        "tags": [
+          "InvoiceLine"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "invoice id",
+            "in": "path",
+            "name": "invoiceId",
+            "required": true,
+            "schema": {
+			  "type": "integer",
+			  "format": "int32"
+			}
+          }
+        ],
+        "requestBody": {
+          "description": "Request Body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvoiceLineInsert",
+                "description": "Request Body"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      	"url": "http://orders:8080"
+    },
+    {
+		"url": "http://localhost:8016"
+	}
+]
+}

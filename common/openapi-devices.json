@@ -1,0 +1,349 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "schemas": {
+      "ValidateErrorJSON": {
+        "description": "A validation error",
+        "properties": {
+          "message": {
+            "type": "string",
+            "enum": [
+              "Validation failed"
+            ],
+            "nullable": false
+          },
+          "details": {
+            "properties": {},
+            "additionalProperties": {},
+            "type": "object"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "NotFoundError": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "stack": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "message"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Device": {
+        "properties": {
+          "Guid": {
+            "type": "string"
+          },
+          "CustomerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Model": {
+            "type": "string"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "Description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "Guid",
+          "CustomerId",
+          "Model",
+          "Name"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "DeviceInsert": {
+        "description": "Device Insert",
+        "properties": {
+          "Guid": {
+            "type": "string"
+          },
+          "CustomerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Model": {
+            "type": "string"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "Description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "Guid",
+          "CustomerId",
+          "Model",
+          "Name"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {}
+  },
+  "info": {
+    "title": "Devices micro service",
+    "version": "0.7.0",
+    "description": "Devices micro service using the Chinook database",
+    "license": {
+      "name": "ISC"
+    },
+    "contact": {
+      "name": "Chris Toth"
+    }
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/devices": {
+      "get": {
+        "operationId": "getDevices",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Device"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get a set of devices. Can be paginated",
+        "tags": [
+          "Device"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "Filter results by specified customer id",
+            "in": "query",
+            "name": "customerId",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "how many records should be returned",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "description": "how many records to offset by",
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "insertDevice",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Device"
+                }
+              }
+            }
+          }
+        },
+        "description": "Create an device. Returns the created device.",
+        "tags": [
+          "Device"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "Request Body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceInsert",
+                "description": "Request Body"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/devices/{deviceId}": {
+      "get": {
+        "operationId": "getDevicesById",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Device"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateErrorJSON"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get a single device using the invoice ID.",
+        "tags": [
+          "Device"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "device id",
+            "in": "path",
+            "name": "deviceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "put": {
+        "operationId": "updateDevice",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Device"
+                }
+              }
+            }
+          }
+        },
+        "description": "Update a device. Returns the updated device.",
+        "tags": [
+          "Device"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "device id",
+            "in": "path",
+            "name": "deviceId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request Body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceInsert",
+                "description": "Request Body"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteDevice",
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        },
+        "description": "Delete a device.",
+        "tags": [
+          "Device"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "device id",
+            "in": "path",
+            "name": "deviceId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://devices:8080"
+    },
+    {
+  		"url": "http://localhost:8017"
+	  }
+  ]
+}

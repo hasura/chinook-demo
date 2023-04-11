@@ -1,0 +1,1318 @@
+{
+  "resource_version": 11,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "music",
+        "kind": "mssql",
+        "tables": [
+          {
+            "table": {
+              "name": "Album",
+              "schema": "dbo"
+            },
+            "configuration": {
+              "column_config": {
+                "AlbumId": {
+                  "custom_name": "id"
+                },
+                "ArtistId": {
+                  "custom_name": "artist_id"
+                },
+                "Title": {
+                  "custom_name": "title"
+                }
+              },
+              "custom_column_names": {},
+              "custom_name": "albums",
+              "custom_root_fields": {}
+            },
+            "object_relationships": [
+              {
+                "name": "artist",
+                "using": {
+                  "foreign_key_constraint_on": "ArtistId"
+                }
+              }
+            ],
+            "array_relationships": [
+              {
+                "name": "tracks",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "AlbumId",
+                    "table": {
+                      "name": "Track",
+                      "schema": "dbo"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": "*"
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": "*",
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "Artist",
+              "schema": "dbo"
+            },
+            "configuration": {
+              "column_config": {
+                "ArtistId": {
+                  "custom_name": "id"
+                },
+                "Name": {
+                  "custom_name": "name"
+                }
+              },
+              "custom_column_names": {},
+              "custom_name": "artists",
+              "custom_root_fields": {}
+            },
+            "array_relationships": [
+              {
+                "name": "albums",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "ArtistId",
+                    "table": {
+                      "name": "Album",
+                      "schema": "dbo"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": "*"
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": "*",
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "Genre",
+              "schema": "dbo"
+            },
+            "configuration": {
+              "column_config": {
+                "GenreId": {
+                  "custom_name": "id"
+                },
+                "Name": {
+                  "custom_name": "name"
+                }
+              },
+              "custom_column_names": {},
+              "custom_name": "genres",
+              "custom_root_fields": {}
+            },
+            "array_relationships": [
+              {
+                "name": "tracks",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "GenreId",
+                    "table": {
+                      "name": "Track",
+                      "schema": "dbo"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": "*"
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": "*",
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "MediaType",
+              "schema": "dbo"
+            },
+            "configuration": {
+              "column_config": {
+                "MediaTypeId": {
+                  "custom_name": "id"
+                },
+                "Name": {
+                  "custom_name": "name"
+                }
+              },
+              "custom_column_names": {},
+              "custom_name": "media_types",
+              "custom_root_fields": {}
+            },
+            "array_relationships": [
+              {
+                "name": "tracks",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "MediaTypeId",
+                    "table": {
+                      "name": "Track",
+                      "schema": "dbo"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": "*"
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": "*",
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "Track",
+              "schema": "dbo"
+            },
+            "configuration": {
+              "column_config": {
+                "AlbumId": {
+                  "custom_name": "album_id"
+                },
+                "Bytes": {
+                  "custom_name": "bytes"
+                },
+                "Composer": {
+                  "custom_name": "composer"
+                },
+                "GenreId": {
+                  "custom_name": "genre_id"
+                },
+                "MediaTypeId": {
+                  "custom_name": "media_type_id"
+                },
+                "Milliseconds": {
+                  "custom_name": "milliseconds"
+                },
+                "Name": {
+                  "custom_name": "name"
+                },
+                "TrackId": {
+                  "custom_name": "id"
+                },
+                "UnitPrice": {
+                  "custom_name": "unit_price"
+                }
+              },
+              "custom_column_names": {},
+              "custom_name": "tracks",
+              "custom_root_fields": {}
+            },
+            "object_relationships": [
+              {
+                "name": "album",
+                "using": {
+                  "foreign_key_constraint_on": "AlbumId"
+                }
+              },
+              {
+                "name": "genre",
+                "using": {
+                  "foreign_key_constraint_on": "GenreId"
+                }
+              },
+              {
+                "name": "media_type",
+                "using": {
+                  "foreign_key_constraint_on": "MediaTypeId"
+                }
+              }
+            ],
+            "remote_relationships": [
+              {
+                "definition": {
+                  "hasura_fields": [
+                    "TrackId"
+                  ],
+                  "remote_field": {
+                    "invoice_lines": {
+                      "arguments": {
+                        "where": {
+                          "track_id": {
+                            "_eq": "$TrackId"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "remote_schema": "orders"
+                },
+                "name": "invoice_track"
+              },
+              {
+                "definition": {
+                  "to_source": {
+                    "field_mapping": {
+                      "TrackId": "TrackId"
+                    },
+                    "relationship_type": "object",
+                    "source": "playlist",
+                    "table": {
+                      "name": "PlaylistTrack",
+                      "schema": "dbo"
+                    }
+                  }
+                },
+                "name": "playlist_track"
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": "*"
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": "*",
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "connection_string": "Driver={ODBC Driver 18 for SQL Server};server=mssql,1433;database=chinook_music;uid=sa;pwd=Password-123;encrypt=optional;",
+            "pool_settings": {
+              "idle_timeout": 5,
+              "max_connections": null,
+              "total_max_connections": null
+            }
+          }
+        },
+        "customization": {
+          "naming_convention": "hasura-default"
+        }
+      },
+      {
+        "name": "playlist",
+        "kind": "mssql",
+        "tables": [
+          {
+            "table": {
+              "name": "PlaylistTrack",
+              "schema": "dbo"
+            },
+            "configuration": {
+              "column_config": {
+                "PlaylistId": {
+                  "custom_name": "playlist_id"
+                },
+                "TrackId": {
+                  "custom_name": "track_id"
+                }
+              },
+              "custom_column_names": {},
+              "custom_name": "playlist_tracks",
+              "custom_root_fields": {}
+            },
+            "object_relationships": [
+              {
+                "name": "playlist",
+                "using": {
+                  "foreign_key_constraint_on": "PlaylistId"
+                }
+              }
+            ],
+            "remote_relationships": [
+              {
+                "definition": {
+                  "hasura_fields": [
+                    "TrackId"
+                  ],
+                  "remote_field": {
+                    "invoice_lines": {
+                      "arguments": {
+                        "where": {
+                          "track_id": {
+                            "_eq": "$TrackId"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "remote_schema": "orders"
+                },
+                "name": "invoice_track"
+              },
+              {
+                "definition": {
+                  "to_source": {
+                    "field_mapping": {
+                      "TrackId": "TrackId"
+                    },
+                    "relationship_type": "object",
+                    "source": "music",
+                    "table": {
+                      "name": "Track",
+                      "schema": "dbo"
+                    }
+                  }
+                },
+                "name": "track"
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": "*"
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": "*",
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "Playlist",
+              "schema": "dbo"
+            },
+            "configuration": {
+              "column_config": {
+                "Name": {
+                  "custom_name": "name"
+                },
+                "PlaylistId": {
+                  "custom_name": "id"
+                }
+              },
+              "custom_column_names": {},
+              "custom_name": "playlists",
+              "custom_root_fields": {}
+            },
+            "array_relationships": [
+              {
+                "name": "playlist_tracks",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "PlaylistId",
+                    "table": {
+                      "name": "PlaylistTrack",
+                      "schema": "dbo"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": "*"
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": "*",
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": "*",
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "connection_string": "Driver={ODBC Driver 18 for SQL Server};server=mssql,1433;database=chinook_playlist;uid=sa;pwd=Password-123;encrypt=optional;",
+            "pool_settings": {
+              "idle_timeout": 5,
+              "max_connections": null,
+              "total_max_connections": null
+            }
+          }
+        },
+        "customization": {
+          "naming_convention": "hasura-default"
+        }
+      }
+    ],
+    "remote_schemas": [
+      {
+        "name": "crm",
+        "definition": {
+          "url": "http://hge-crm:8080/v1/graphql",
+          "timeout_seconds": 60,
+          "headers": [
+            {
+              "name": "x-hasura-admin-secret",
+              "value": "myadminsecretkey"
+            }
+          ]
+        },
+        "comment": "",
+        "remote_relationships": [
+          {
+            "relationships": [
+              {
+                "definition": {
+                  "to_remote_schema": {
+                    "lhs_fields": [
+                      "id"
+                    ],
+                    "remote_field": {
+                      "invoices": {
+                        "arguments": {
+                          "where": {
+                            "customer_id": {
+                              "_eq": "$id"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "remote_schema": "orders"
+                  }
+                },
+                "name": "invoices"
+              }
+            ],
+            "type_name": "customers"
+          }
+        ]
+      },
+      {
+        "name": "orders",
+        "definition": {
+          "url": "http://hge-orders:8080/v1/graphql",
+          "timeout_seconds": 60,
+          "headers": [
+            {
+              "name": "x-hasura-admin-secret",
+              "value": "myadminsecretkey"
+            }
+          ]
+        },
+        "comment": "",
+        "remote_relationships": [
+          {
+            "relationships": [
+              {
+                "definition": {
+                  "to_remote_schema": {
+                    "lhs_fields": [
+                      "customer_id"
+                    ],
+                    "remote_field": {
+                      "customers": {
+                        "arguments": {
+                          "where": {
+                            "id": {
+                              "_eq": "$customer_id"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "remote_schema": "crm"
+                  }
+                },
+                "name": "customer"
+              }
+            ],
+            "type_name": "invoices"
+          },
+          {
+            "relationships": [
+              {
+                "definition": {
+                  "to_source": {
+                    "field_mapping": {
+                      "track_id": "TrackId"
+                    },
+                    "relationship_type": "object",
+                    "source": "music",
+                    "table": {
+                      "name": "Track",
+                      "schema": "dbo"
+                    }
+                  }
+                },
+                "name": "track"
+              }
+            ],
+            "type_name": "invoice_lines"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "name": "delete_employees_by_pk",
+        "definition": {
+          "handler": "http://hge-corp:8080/api/rest/employees",
+          "output_type": "EmployeeId",
+          "headers": [
+            {
+              "name": "x-hasura-admin-secret",
+              "value": "myadminsecretkey"
+            }
+          ],
+          "arguments": [
+            {
+              "name": "id",
+              "type": "Int!"
+            }
+          ],
+          "request_transform": {
+            "body": {
+              "action": "remove"
+            },
+            "method": "DELETE",
+            "query_params": {},
+            "template_engine": "Kriti",
+            "url": "{{$base_url}}/{{$body.input.id}}",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{{ $body.employee }}"
+            },
+            "version": 2,
+            "template_engine": "Kriti"
+          },
+          "type": "mutation",
+          "kind": "synchronous"
+        },
+        "permissions": [
+          {
+            "role": "hr_manager"
+          }
+        ]
+      },
+      {
+        "name": "employees",
+        "definition": {
+          "handler": "http://hge-corp:8080/api/rest/employees",
+          "output_type": "EmployeeList",
+          "headers": [
+            {
+              "name": "x-hasura-admin-secret",
+              "value": "myadminsecretkey"
+            }
+          ],
+          "request_transform": {
+            "body": {
+              "action": "remove"
+            },
+            "method": "GET",
+            "query_params": {},
+            "request_headers": {
+              "add_headers": {},
+              "remove_headers": [
+                "content-type"
+              ]
+            },
+            "template_engine": "Kriti",
+            "version": 2
+          },
+          "type": "query"
+        }
+      },
+      {
+        "name": "employeesFlattened",
+        "definition": {
+          "handler": "http://hge-corp:8080/api/rest/employees",
+          "output_type": "[EmployeeSummary]",
+          "headers": [
+            {
+              "name": "x-hasura-admin-secret",
+              "value": "myadminsecretkey"
+            }
+          ],
+          "request_transform": {
+            "body": {
+              "action": "remove"
+            },
+            "method": "GET",
+            "query_params": {},
+            "request_headers": {
+              "add_headers": {},
+              "remove_headers": [
+                "content-type"
+              ]
+            },
+            "template_engine": "Kriti",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{{ $body.employees }}"
+            },
+            "version": 2,
+            "template_engine": "Kriti"
+            },
+          "type": "query"
+        }
+      },
+      {
+        "name": "employees_by_pk",
+        "definition": {
+          "handler": "http://hge-corp:8080/api/rest/employees",
+          "output_type": "Employee",
+          "headers": [
+            {
+              "name": "x-hasura-admin-secret",
+              "value": "myadminsecretkey"
+            }
+          ],
+          "arguments": [
+            {
+              "name": "id",
+              "type": "Int!"
+            }
+          ],
+          "request_transform": {
+            "body": {
+              "action": "remove"
+            },
+            "method": "GET",
+            "query_params": {},
+            "request_headers": {
+              "add_headers": {},
+              "remove_headers": [
+                "content-type"
+              ]
+            },
+            "template_engine": "Kriti",
+            "url": "{{$base_url}}/{{$body.input.id}}",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{{ $body.employee }}"
+            },
+            "version": 2,
+            "template_engine": "Kriti"
+            },
+          "type": "query"
+        },
+        "permissions": [
+          {
+            "role": "employee"
+          }
+        ]
+      },
+      {
+        "name": "insert_employees_one",
+        "definition": {
+          "handler": "http://hge-corp:8080/api/rest/employees",
+          "output_type": "Int",
+          "headers": [
+            {
+              "name": "x-hasura-admin-secret",
+              "value": "myadminsecretkey"
+            }
+          ],
+          "arguments": [
+            {
+              "name": "employee",
+              "type": "EmployeeInput!"
+            }
+          ],
+          "request_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{ \"employee\": {{$body.input.employee}} }"
+            },
+            "method": "POST",
+            "query_params": {},
+            "template_engine": "Kriti",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{{ $body.employee.id }}"
+            },
+            "version": 2,
+            "template_engine": "Kriti"
+            },
+          "type": "mutation",
+          "kind": "synchronous"
+        },
+        "permissions": [
+          {
+            "role": "hr"
+          }
+        ]
+      },
+      {
+        "name": "update_employees_by_pk",
+        "definition": {
+          "handler": "http://hge-corp:8080/api/rest/employees",
+          "output_type": "Int",
+          "headers": [
+            {
+              "name": "x-hasura-admin-secret",
+              "value": "myadminsecretkey"
+            }
+          ],
+          "arguments": [
+            {
+              "name": "id",
+              "type": "Int!"
+            },
+            {
+              "name": "employee",
+              "type": "EmployeeUpdate!"
+            }
+          ],
+          "request_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{ \"employee\": {{$body.input.employee}} }"
+            },
+            "method": "PUT",
+            "query_params": {},
+            "template_engine": "Kriti",
+            "url": "{{$base_url}}/{{$body.input.id}}",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{{ $body.employee.id }}"
+            },
+            "version": 2,
+            "template_engine": "Kriti"
+            },
+          "type": "mutation",
+          "kind": "synchronous"
+        },
+        "permissions": [
+          {
+            "role": "hr"
+          }
+        ]
+      }
+    ],
+    "custom_types": {
+      "input_objects": [
+        {
+          "name": "EmployeeInput",
+          "fields": [
+            {
+              "name": "id",
+              "type": "Int"
+            },
+            {
+              "name": "first_name",
+              "type": "String!"
+            },
+            {
+              "name": "last_name",
+              "type": "String!"
+            },
+            {
+              "name": "title",
+              "type": "String"
+            },
+            {
+              "name": "email",
+              "type": "String"
+            },
+            {
+              "name": "phone",
+              "type": "String"
+            },
+            {
+              "name": "fax",
+              "type": "String"
+            },
+            {
+              "name": "birth_date",
+              "type": "String"
+            },
+            {
+              "name": "address",
+              "type": "String"
+            },
+            {
+              "name": "city",
+              "type": "String"
+            },
+            {
+              "name": "state",
+              "type": "String"
+            },
+            {
+              "name": "country",
+              "type": "String"
+            },
+            {
+              "name": "postal_code",
+              "type": "String"
+            },
+            {
+              "name": "hire_date",
+              "type": "String"
+            },
+            {
+              "name": "manager_id",
+              "type": "Int"
+            }
+          ]
+        },
+        {
+          "name": "EmployeeUpdate",
+          "fields": [
+            {
+              "name": "first_name",
+              "type": "String"
+            },
+            {
+              "name": "last_name",
+              "type": "String"
+            },
+            {
+              "name": "title",
+              "type": "String"
+            },
+            {
+              "name": "email",
+              "type": "String"
+            },
+            {
+              "name": "phone",
+              "type": "String"
+            },
+            {
+              "name": "fax",
+              "type": "String"
+            },
+            {
+              "name": "birth_date",
+              "type": "String"
+            },
+            {
+              "name": "address",
+              "type": "String"
+            },
+            {
+              "name": "city",
+              "type": "String"
+            },
+            {
+              "name": "state",
+              "type": "String"
+            },
+            {
+              "name": "country",
+              "type": "String"
+            },
+            {
+              "name": "postal_code",
+              "type": "String"
+            },
+            {
+              "name": "hire_date",
+              "type": "String"
+            },
+            {
+              "name": "manager_id",
+              "type": "Int"
+            }
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "name": "EmployeeSummary",
+          "fields": [
+            {
+              "name": "id",
+              "type": "Int!"
+            },
+            {
+              "name": "first_name",
+              "type": "String!"
+            },
+            {
+              "name": "last_name",
+              "type": "String!"
+            },
+            {
+              "name": "title",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "name": "EmployeeId",
+          "fields": [
+            {
+              "name": "id",
+              "type": "Int!"
+            }
+          ]
+        },
+        {
+          "name": "Employee",
+          "fields": [
+            {
+              "name": "id",
+              "type": "Int!"
+            },
+            {
+              "name": "first_name",
+              "type": "String!"
+            },
+            {
+              "name": "last_name",
+              "type": "String!"
+            },
+            {
+              "name": "title",
+              "type": "String"
+            },
+            {
+              "name": "email",
+              "type": "String"
+            },
+            {
+              "name": "phone",
+              "type": "String"
+            },
+            {
+              "name": "fax",
+              "type": "String"
+            },
+            {
+              "name": "birth_date",
+              "type": "String"
+            },
+            {
+              "name": "address",
+              "type": "String"
+            },
+            {
+              "name": "city",
+              "type": "String"
+            },
+            {
+              "name": "state",
+              "type": "String"
+            },
+            {
+              "name": "country",
+              "type": "String"
+            },
+            {
+              "name": "postal_code",
+              "type": "String"
+            },
+            {
+              "name": "hire_date",
+              "type": "String"
+            },
+            {
+              "name": "manager_id",
+              "type": "Int"
+            }
+          ]
+        },
+        {
+          "name": "EmployeeList",
+          "fields": [
+            {
+              "name": "employees",
+              "type": "[EmployeeSummary]"
+            }
+          ]
+        },
+        {
+          "name": "EmployeeOutput",
+          "fields": [
+            {
+              "name": "body",
+              "type": "EmployeeList"
+            }
+          ]
+        },
+        {
+          "name": "EmployeeByPkOutput",
+          "fields": [
+            {
+              "name": "employee",
+              "type": "Employee"
+            }
+          ]
+        }
+      ]
+    },
+    "inherited_roles": [
+      {
+        "role_name": "hr_manager",
+        "role_set": [
+          "hr"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,909 @@
+{
+  "resource_version": 77,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "music",
+        "kind": "postgres",
+        "tables": [
+          {
+            "table": {
+              "name": "albums",
+              "schema": "public"
+            },
+            "object_relationships": [
+              {
+                "name": "artist",
+                "using": {
+                  "foreign_key_constraint_on": "artist_id"
+                }
+              }
+            ],
+            "array_relationships": [
+              {
+                "name": "tracks",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "album_id",
+                    "table": {
+                      "name": "tracks",
+                      "schema": "public"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "title",
+                    "artist_id",
+                    "id"
+                  ]
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "title",
+                    "artist_id",
+                    "id"
+                  ],
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "title",
+                    "artist_id",
+                    "id"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "title",
+                    "artist_id",
+                    "id"
+                  ],
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "artists",
+              "schema": "public"
+            },
+            "array_relationships": [
+              {
+                "name": "albums",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "artist_id",
+                    "table": {
+                      "name": "albums",
+                      "schema": "public"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "name",
+                    "id"
+                  ]
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "id",
+                    "name"
+                  ],
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "id"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "id"
+                  ],
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "genres",
+              "schema": "public"
+            },
+            "array_relationships": [
+              {
+                "name": "tracks",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "genre_id",
+                    "table": {
+                      "name": "tracks",
+                      "schema": "public"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "name",
+                    "id"
+                  ]
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "id"
+                  ],
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "id"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "id"
+                  ],
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "media_types",
+              "schema": "public"
+            },
+            "array_relationships": [
+              {
+                "name": "tracks",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "media_type_id",
+                    "table": {
+                      "name": "tracks",
+                      "schema": "public"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "name",
+                    "id"
+                  ]
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "id"
+                  ],
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "id"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "id"
+                  ],
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "tracks",
+              "schema": "public"
+            },
+            "object_relationships": [
+              {
+                "name": "album",
+                "using": {
+                  "foreign_key_constraint_on": "album_id"
+                }
+              },
+              {
+                "name": "genre",
+                "using": {
+                  "foreign_key_constraint_on": "genre_id"
+                }
+              },
+              {
+                "name": "media_type",
+                "using": {
+                  "foreign_key_constraint_on": "media_type_id"
+                }
+              }
+            ],
+            "remote_relationships": [
+              {
+                "definition": {
+                  "to_source": {
+                    "field_mapping": {
+                      "id": "track_id"
+                    },
+                    "relationship_type": "object",
+                    "source": "playlist",
+                    "table": {
+                      "name": "playlist_track",
+                      "schema": "public"
+                    }
+                  }
+                },
+                "name": "playlist_track"
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "composer",
+                    "name",
+                    "album_id",
+                    "bytes",
+                    "genre_id",
+                    "id",
+                    "media_type_id",
+                    "milliseconds",
+                    "unit_price"
+                  ]
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "composer",
+                    "name",
+                    "album_id",
+                    "bytes",
+                    "genre_id",
+                    "id",
+                    "media_type_id",
+                    "milliseconds",
+                    "unit_price"
+                  ],
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "composer",
+                    "name",
+                    "album_id",
+                    "bytes",
+                    "genre_id",
+                    "id",
+                    "media_type_id",
+                    "milliseconds",
+                    "unit_price"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "composer",
+                    "name",
+                    "album_id",
+                    "bytes",
+                    "genre_id",
+                    "id",
+                    "media_type_id",
+                    "milliseconds",
+                    "unit_price"
+                  ],
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "database_url": "postgres://postgres:postgrespassword@postgres:5432/chinook_music",
+            "isolation_level": "read-committed",
+            "use_prepared_statements": false
+          }
+        }
+      },
+      {
+        "name": "playlist",
+        "kind": "postgres",
+        "tables": [
+          {
+            "table": {
+              "name": "playlist_track",
+              "schema": "public"
+            },
+            "object_relationships": [
+              {
+                "name": "playlist",
+                "using": {
+                  "foreign_key_constraint_on": "playlist_id"
+                }
+              }
+            ],
+            "remote_relationships": [
+              {
+                "definition": {
+                  "to_source": {
+                    "field_mapping": {
+                      "track_id": "id"
+                    },
+                    "relationship_type": "object",
+                    "source": "music",
+                    "table": {
+                      "name": "tracks",
+                      "schema": "public"
+                    }
+                  }
+                },
+                "name": "track"
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "playlist_id",
+                    "track_id"
+                  ]
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "playlist_id",
+                    "track_id"
+                  ],
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "playlist_id",
+                    "track_id"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "playlist_id",
+                    "track_id"
+                  ],
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "playlists",
+              "schema": "public"
+            },
+            "array_relationships": [
+              {
+                "name": "playlist_tracks",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "playlist_id",
+                    "table": {
+                      "name": "playlist_track",
+                      "schema": "public"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "name",
+                    "id"
+                  ]
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "id"
+                  ],
+                  "filter": {}
+                }
+              },
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "id"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "id"
+                  ],
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "employee",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "database_url": "postgres://postgres:postgrespassword@postgres:5432/chinook_playlist",
+            "isolation_level": "read-committed",
+            "use_prepared_statements": false
+          }
+        }
+      }
+    ],
+    "remote_schemas": [
+      {
+        "name": "crm",
+        "definition": {
+          "url": "http://hge-crm:8080/v1/graphql",
+          "timeout_seconds": 60,
+          "customization": {},
+          "headers": [
+            {
+              "name": "x-hasura-admin-secret",
+              "value": "myadminsecretkey"
+            }
+          ]
+        },
+        "remote_relationships": [
+          {
+            "relationships": [
+              {
+                "definition": {
+                  "to_remote_schema": {
+                    "lhs_fields": [
+                      "id"
+                    ],
+                    "remote_field": {
+                      "getDevices": {
+                        "arguments": {
+                          "customerId": "$id"
+                        }
+                      }
+                    },
+                    "remote_schema": "devices"
+                  }
+                },
+                "name": "devices"
+              },
+              {
+                "definition": {
+                  "to_remote_schema": {
+                    "lhs_fields": [
+                      "id"
+                    ],
+                    "remote_field": {
+                      "getInvoices": {
+                        "arguments": {
+                          "customerId": "$id"
+                        }
+                      }
+                    },
+                    "remote_schema": "orders"
+                  }
+                },
+                "name": "invoices"
+              },
+              {
+                "definition": {
+                  "to_remote_schema": {
+                    "lhs_fields": [
+                      "support_rep_id"
+                    ],
+                    "remote_field": {
+                      "employees": {
+                        "arguments": {
+                          "where": {
+                            "id": {
+                              "_eq": "$support_rep_id"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "remote_schema": "hr"
+                  }
+                },
+                "name": "support_rep"
+              }
+            ],
+            "type_name": "customers"
+          }
+        ]
+      },
+      {
+        "name": "devices",
+        "definition": {
+          "url": "http://hge-devices:8080/v1/graphql",
+          "timeout_seconds": 60,
+          "headers": [
+            {
+              "name": "x-hasura-admin-secret",
+              "value": "myadminsecretkey"
+            }
+          ]
+        },
+        "comment": "",
+        "remote_relationships": [
+          {
+            "relationships": [
+              {
+                "definition": {
+                  "to_remote_schema": {
+                    "lhs_fields": [
+                      "customerId"
+                    ],
+                    "remote_field": {
+                      "customers": {
+                        "arguments": {
+                          "where": {
+                            "id": {
+                              "_eq": "$customerId"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "remote_schema": "crm"
+                  }
+                },
+                "name": "customer"
+              }
+            ],
+            "type_name": "Device"
+          }
+        ]
+      },
+      {
+        "name": "hr",
+        "definition": {
+          "url": "http://hge-hr:8080/v1/graphql",
+          "timeout_seconds": 60,
+          "customization": {},
+          "headers": [
+            {
+              "name": "x-hasura-admin-secret",
+              "value": "myadminsecretkey"
+            }
+          ]
+        },
+        "remote_relationships": [
+          {
+            "relationships": [
+              {
+                "definition": {
+                  "to_remote_schema": {
+                    "lhs_fields": [
+                      "id"
+                    ],
+                    "remote_field": {
+                      "customers": {
+                        "arguments": {
+                          "where": {
+                            "support_rep_id": {
+                              "_eq": "$id"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "remote_schema": "crm"
+                  }
+                },
+                "name": "customers"
+              }
+            ],
+            "type_name": "employees"
+          }
+        ]
+      },
+      {
+        "name": "orders",
+        "definition": {
+          "url": "http://hge-orders:8080/v1/graphql",
+          "timeout_seconds": 60,
+          "headers": [
+            {
+              "name": "x-hasura-admin-secret",
+              "value": "myadminsecretkey"
+            }
+          ]
+        },
+        "comment": "",
+        "remote_relationships": [
+          {
+            "relationships": [
+              {
+                "definition": {
+                  "to_remote_schema": {
+                    "lhs_fields": [
+                      "id"
+                    ],
+                    "remote_field": {
+                      "getInvoiceLines": {
+                        "arguments": {
+                          "invoiceId": "$id"
+                        }
+                      }
+                    },
+                    "remote_schema": "orders"
+                  }
+                },
+                "name": "invoiceLines"
+              },
+              {
+                "definition": {
+                  "to_remote_schema": {
+                    "lhs_fields": [
+                      "customerId"
+                    ],
+                    "remote_field": {
+                      "customers": {
+                        "arguments": {
+                          "where": {
+                            "id": {
+                              "_eq": "$customerId"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "remote_schema": "crm"
+                  }
+                },
+                "name": "customer"
+              },
+              {
+                "definition": {
+                  "to_remote_schema": {
+                    "lhs_fields": [
+                      "deviceId"
+                    ],
+                    "remote_field": {
+                      "getDevicesById": {
+                        "arguments": {
+                          "deviceId": "$deviceId"
+                        }
+                      }
+                    },
+                    "remote_schema": "devices"
+                  }
+                },
+                "name": "device"
+              }
+            ],
+            "type_name": "Invoice"
+          },
+          {
+            "relationships": [
+              {
+                "definition": {
+                  "to_source": {
+                    "field_mapping": {
+                      "trackId": "id"
+                    },
+                    "relationship_type": "object",
+                    "source": "music",
+                    "table": {
+                      "name": "tracks",
+                      "schema": "public"
+                    }
+                  }
+                },
+                "name": "track"
+              }
+            ],
+            "type_name": "InvoiceLine"
+          }
+        ]
+      }
+    ]
+  }
+}
