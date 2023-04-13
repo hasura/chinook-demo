@@ -23,7 +23,7 @@ services:
       test: ["CMD", "redis-cli","ping"]
   devices:
     image: chinook-devices
-    build: ../services/devices
+    build: ../common/services/devices
     ports:
     - "8017:8080"
     restart: always
@@ -31,7 +31,7 @@ services:
       test: ["CMD", "curl","http://localhost:8080/devices"]
   orders:
     image: chinook-orders
-    build: ../services/orders
+    build: ../common/services/orders
     ports:
     - "8016:8080"
     restart: always
