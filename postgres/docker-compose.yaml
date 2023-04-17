@@ -27,16 +27,22 @@ services:
     ports:
     - "8017:8080"
     restart: always
-    healthcheck:
-      test: ["CMD", "curl","http://localhost:8080/devices"]
+    environment:
+      - SERVICE_PORT=8080
+      - PG_DB_URL=postgres://postgres:postgrespassword@postgres:5432/chinook_corp?sslmode=disable
+    #healthcheck:
+    #  test: ["CMD", "curl","http://localhost:8080/devices"]
   orders:
     image: chinook-orders
     build: ../common/services/orders
     ports:
     - "8016:8080"
     restart: always
-    healthcheck:
-      test: ["CMD", "curl","http://localhost:8080/invoices"]
+    environment:
+      - SERVICE_PORT=8080
+      - PG_DB_URL=postgres://postgres:postgrespassword@postgres:5432/chinook_corp?sslmode=disable
+    #healthcheck:
+    #  test: ["CMD", "curl","http://localhost:8080/invoices"]
   hge-devices:
     image: hasura/graphql-engine:latest
     ports:
