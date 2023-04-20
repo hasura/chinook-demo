@@ -10,9 +10,10 @@ services:
     - db_data:/var/lib/postgresql/data
     - ./data-init/pg/:/docker-entrypoint-initdb.d/
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespassword
     healthcheck:
-      test: "pg_isready -q -h postgres"
+      test: "pg_isready -U postgres"
       interval: 10s
       timeout: 5s
       retries: 30
@@ -67,6 +68,7 @@ services:
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLED_APIS: metadata,graphql,config,metrics
+      HASURA_FF_LOGICAL_MODEL_INTERFACE: True
       HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
       HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
     healthcheck:
@@ -98,6 +100,7 @@ services:
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLED_APIS: metadata,graphql,config,metrics
+      HASURA_FF_LOGICAL_MODEL_INTERFACE: True
       HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
       HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
     healthcheck:
@@ -129,6 +132,7 @@ services:
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLED_APIS: metadata,graphql,config,metrics
+      HASURA_FF_LOGICAL_MODEL_INTERFACE: True
       HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
       HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
     healthcheck:
@@ -160,6 +164,7 @@ services:
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLED_APIS: metadata,graphql,config,metrics
+      HASURA_FF_LOGICAL_MODEL_INTERFACE: "True"
       HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
       HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
       SENDGRID_API_KEY_HEADER: Bearer ${SENDGRID_API_KEY_HEADER}
@@ -215,6 +220,7 @@ services:
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLED_APIS: metadata,graphql,config,metrics
+      HASURA_FF_LOGICAL_MODEL_INTERFACE: True
       HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
       HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
     healthcheck:
