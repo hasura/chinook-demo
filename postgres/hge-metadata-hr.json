@@ -294,6 +294,50 @@
             ]
           }
         ],
+        "logical_models": [
+          {
+            "arguments": {},
+            "code": "SELECT first_name || ' ' || last_name as name, title, REGEXP_REPLACE(email, '^[A-Za-z0-9._%-]+@', '*****@','g') AS email, TO_CHAR(hire_date, 'YYYY') AS hired FROM employees",
+            "returns": "EmployeeMasked",
+            "root_field_name": "employee_masked"
+          }
+        ],
+        "custom_return_types": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "nullable": false,
+                "type": "text"
+              },
+              {
+                "name": "title",
+                "nullable": false,
+                "type": "varchar"
+              },
+              {
+                "name": "email",
+                "nullable": false,
+                "type": "text"
+              },
+              {
+                "name": "hired",
+                "nullable": false,
+                "type": "text"
+              }
+            ],
+            "name": "EmployeeMasked",
+            "select_permissions": [
+              {
+                "permission": {
+                  "columns": "*",
+                  "filter": {}
+                },
+                "role": "anonymous"
+              }
+            ]
+          }
+        ],
         "configuration": {
           "connection_info": {
             "database_url": "postgres://postgres:postgrespassword@postgres:5432/chinook_corp",

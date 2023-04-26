@@ -34,6 +34,11 @@ CREATE TABLE public.ad_hoc_manager (
     applies_to_org boolean
 );
 
+DROP TABLE IF EXISTS public.dynamic_permissions;
+CREATE TABLE public.dynamic_permissions (
+    id character varying(70) NOT NULL
+);
+
 DROP VIEW IF EXISTS public.employee_org_permissions CASCADE;
 CREATE OR REPLACE VIEW public.employee_org_permissions AS
 WITH RECURSIVE org AS (
@@ -103,3 +108,8 @@ INSERT INTO employees (id, last_name, first_name, title, manager_id, email) VALU
 
 INSERT INTO ad_hoc_manager (id, employee_id, applies_to_org) VALUES (10, 2, false);
 INSERT INTO ad_hoc_manager (id, employee_id, applies_to_org) VALUES (11, 6, true);
+
+INSERT INTO dynamic_permissions (id) VALUES (N'basic');
+INSERT INTO dynamic_permissions (id) VALUES (N'personal');
+INSERT INTO dynamic_permissions (id) VALUES (N'address');
+INSERT INTO dynamic_permissions (id) VALUES (N'admin');

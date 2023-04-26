@@ -11,7 +11,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespassword
     healthcheck:
-      test: "pg_isready -q -h postgres"
+      test: "pg_isready -U postgres"
       interval: 10s
       timeout: 5s
       retries: 30
@@ -81,7 +81,8 @@ services:
       ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ENABLED_APIS: metadata,graphql,config,metrics
+      HASURA_GRAPHQL_ENABLED_APIS: metadata, graphql, config, metrics
+      HASURA_FF_LOGICAL_MODEL_INTERFACE: "True"
       HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
       HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
     healthcheck:
@@ -112,6 +113,8 @@ services:
       ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLED_APIS: metadata, graphql, config, metrics
+      HASURA_FF_LOGICAL_MODEL_INTERFACE: "True"
       HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
       HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
     healthcheck:
@@ -142,6 +145,8 @@ services:
       ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLED_APIS: metadata, graphql, config, metrics
+      HASURA_FF_LOGICAL_MODEL_INTERFACE: "True"
       HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
       HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
     healthcheck:
@@ -172,6 +177,8 @@ services:
       ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLED_APIS: metadata, graphql, config, metrics
+      HASURA_FF_LOGICAL_MODEL_INTERFACE: "True"
       HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
       HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
       SENDGRID_API_KEY_HEADER: Bearer ${SENDGRID_API_KEY_HEADER}
@@ -226,6 +233,7 @@ services:
       ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_FF_LOGICAL_MODEL_INTERFACE: "True"
       HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: streaming_subscriptions
       HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
     healthcheck:
