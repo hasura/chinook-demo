@@ -266,6 +266,50 @@
             ]
           }
         ],
+        "logical_models": [
+          {
+            "arguments": {},
+            "code": "SELECT FirstName + ' ' + LastName as name, title, '*****' + SUBSTRING(Email, CHARINDEX('@', Email), 50) AS Email, CONVERT(VARCHAR(4),HireDate,112) AS HireDate FROM Employee",
+            "returns": "EmployeeMasked",
+            "root_field_name": "employee_masked"
+          }
+        ],
+        "custom_return_types": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "nullable": false,
+                "type": "varchar"
+              },
+              {
+                "name": "title",
+                "nullable": false,
+                "type": "varchar"
+              },
+              {
+                "name": "email",
+                "nullable": false,
+                "type": "varchar"
+              },
+              {
+                "name": "hired",
+                "nullable": false,
+                "type": "varchar"
+              }
+            ],
+            "name": "EmployeeMasked",
+            "select_permissions": [
+              {
+                "permission": {
+                  "columns": "*",
+                  "filter": {}
+                },
+                "role": "anonymous"
+              }
+            ]
+          }
+        ],
         "configuration": {
           "connection_info": {
             "connection_string": "Driver={ODBC Driver 18 for SQL Server};server=mssql,1433;database=chinook_corp;uid=sa;pwd=Password-123;encrypt=optional;",
@@ -279,115 +323,6 @@
         "customization": {
           "naming_convention": "hasura-default"
         }
-      }
-    ],
-    "query_collections": [
-      {
-        "name": "allowed-queries",
-        "definition": {
-          "queries": [
-            {
-              "name": "Get All Employees",
-              "query": "query GetAllEmployees {\n\temployees {\n\t\tid\n\t\tfirst_name\n\t\tlast_name\n\t\ttitle\n\t}\n}\n"
-            },
-            {
-              "name": "Add Employee",
-              "query": "mutation AddEmployee ($employee: employees_insert_input!) {\n\temployee: insert_employees_one(object: $employee) {\n\t\tid\n\t}\n}\n"
-            },
-            {
-              "name": "Update Employee",
-              "query": "mutation UpdateEmployee ($id: Int!, $employee: employees_set_input!) {\n\temployee: update_employees_by_pk(pk_columns: {id:$id}, _set: $employee) {\n\t\tid\n\t}\n}\n"
-            },
-            {
-              "name": "Get Employee",
-              "query": "query GetEmployee ($id: Int!) {\n\temployee: employees_by_pk(id: $id) {\n\t\tid\n\t\tfirst_name\n\t\tlast_name\n\t\ttitle\n\t\temail\n\t\tphone\n\t\tfax\n\t\tbirth_date\n\t\taddress\n\t\tcity\n\t\tstate\n\t\tcountry\n\t\tpostal_code\n\t\thire_date\n\t\tmanager_id\n\t}\n}\n"
-            },
-            {
-              "name": "Delete Employee",
-              "query": "mutation DeleteEmployee ($id: Int!) {\n\temployee: delete_employees_by_pk(id: $id) {\n\t\tid\n\t}\n}\n"
-            }
-          ]
-        }
-      }
-    ],
-    "allowlist": [
-      {
-        "collection": "allowed-queries",
-        "scope": {
-          "global": true
-        }
-      }
-    ],
-    "rest_endpoints": [
-      {
-        "comment": "Summary list of employees",
-        "definition": {
-          "query": {
-            "collection_name": "allowed-queries",
-            "query_name": "Get All Employees"
-          }
-        },
-        "methods": [
-          "GET"
-        ],
-        "name": "Get All Employees",
-        "url": "employees"
-      },
-      {
-        "comment": "Add 1 employee",
-        "definition": {
-          "query": {
-            "collection_name": "allowed-queries",
-            "query_name": "Add Employee"
-          }
-        },
-        "methods": [
-          "POST"
-        ],
-        "name": "Add Employee",
-        "url": "employees"
-      },
-      {
-        "comment": "Update an employee by ID",
-        "definition": {
-          "query": {
-            "collection_name": "allowed-queries",
-            "query_name": "Update Employee"
-          }
-        },
-        "methods": [
-          "PUT"
-        ],
-        "name": "Update Employee",
-        "url": "employees/:id"
-      },
-      {
-        "comment": "Get employee by ID",
-        "definition": {
-          "query": {
-            "collection_name": "allowed-queries",
-            "query_name": "Get Employee"
-          }
-        },
-        "methods": [
-          "GET"
-        ],
-        "name": "Get Employee",
-        "url": "employees/:id"
-      },
-      {
-        "comment": "Delete an employee by ID",
-        "definition": {
-          "query": {
-            "collection_name": "allowed-queries",
-            "query_name": "Delete Employee"
-          }
-        },
-        "methods": [
-          "DELETE"
-        ],
-        "name": "Delete Employee",
-        "url": "employees/:id"
       }
     ],
     "inherited_roles": [
