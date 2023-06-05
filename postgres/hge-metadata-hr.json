@@ -9,6 +9,12 @@
         "tables": [
           {
             "table": {
+              "name": "dynamic_permissions",
+              "schema": "public"
+            }
+          },
+          {
+            "table": {
               "name": "employee_org_permissions",
               "schema": "public"
             }
@@ -171,6 +177,53 @@
                     }
                   }
                 }
+              },
+              {
+                "role": "basic",
+                "permission": {
+                  "columns": [
+                    "id",
+                    "last_name",
+                    "first_name",
+                    "title",
+                    "manager_id",
+                    "email"
+                  ],
+                  "filter": {"_exists":{"_table":{"name":"dynamic_permissions","schema":"public"},"_where":{"_and":[{"id":{"_eq":"basic"}},{"id":{"_in":"X-Hasura-Dynamic-Roles"}}]}}}
+                }
+              },
+              {
+                "role": "address",
+                "permission": {
+                  "columns": [
+                    "address",
+                    "city",
+                    "state",
+                    "country",
+                    "postal_code"
+                  ],
+                  "filter": {"_exists":{"_table":{"name":"dynamic_permissions","schema":"public"},"_where":{"_and":[{"id":{"_eq":"address"}},{"id":{"_in":"X-Hasura-Dynamic-Roles"}}]}}}
+                }
+              },
+              {
+                "role": "personal",
+                "permission": {
+                  "columns": [
+                    "birth_date",
+                    "phone",
+                    "fax"
+                  ],
+                  "filter": {"_exists":{"_table":{"name":"dynamic_permissions","schema":"public"},"_where":{"_and":[{"id":{"_eq":"personal"}},{"id":{"_in":"X-Hasura-Dynamic-Roles"}}]}}}
+                }
+              },
+              {
+                "role": "corp",
+                "permission": {
+                  "columns": [
+                    "hire_date"
+                  ],
+                  "filter": {"_exists":{"_table":{"name":"dynamic_permissions","schema":"public"},"_where":{"_and":[{"id":{"_eq":"corp"}},{"id":{"_in":"X-Hasura-Dynamic-Roles"}}]}}}
+                }
               }
             ],
             "update_permissions": [
@@ -228,73 +281,73 @@
                   "filter": {}
                 }
               }
-            ],
-            "event_triggers": [
-              {
-                "name": "goodbye",
-                "definition": {
-                  "delete": {
-                    "columns": "*"
-                  },
-                  "enable_manual": true
-                },
-                "retry_conf": {
-                  "interval_sec": 10,
-                  "num_retries": 0,
-                  "timeout_sec": 60
-                },
-                "webhook": "https://api.sendgrid.com",
-                "headers": [
-                  {
-                    "name": "Authorization",
-                    "value_from_env": "SENDGRID_API_KEY_HEADER"
-                  }
-                ],
-                "request_transform": {
-                  "body": "{\n  \"personalizations\":\n   [\n     {\n       \"from\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n       \"to\":\n         [\n           {\n             \"email\": {{ $body.event.data.old.email }},\n             \"name\": \"{{ $body.event.data.old.first_name }} {{ $body.event.data.old.last_name }}\"\n           }\n         ]\n     }\n   ],\n  \"from\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n  \"reply_to\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n  \"subject\": \"Goodbye\",\n  \"content\":\n    [\n      {\n        \"type\": \"text/html\",\n        \"value\": \"<p>Goodbye {{ $body.event.data.old.first_name }} we are sad to see you leave!</p><p>We wish you the best in your next chapter!</p>\"\n      }\n    ]\n}",
-                  "method": "POST",
-                  "query_params": {},
-                  "template_engine": "Kriti",
-                  "url": "{{$base_url}}/v3/mail/send",
-                  "version": 1
-                }
-              },
-              {
-                "name": "welcome",
-                "definition": {
-                  "enable_manual": true,
-                  "insert": {
-                    "columns": "*"
-                  }
-                },
-                "retry_conf": {
-                  "interval_sec": 10,
-                  "num_retries": 0,
-                  "timeout_sec": 60
-                },
-                "webhook": "https://api.sendgrid.com",
-                "headers": [
-                  {
-                    "name": "Authorization",
-                    "value_from_env": "SENDGRID_API_KEY_HEADER"
-                  }
-                ],
-                "request_transform": {
-                  "body": {
-                    "action": "transform",
-                    "template": "{\n  \"personalizations\":\n   [\n     {\n       \"from\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n       \"to\":\n         [\n           {\n             \"email\": \"{{ $body.event.data.new.email }}\",\n             \"name\": \"{{ $body.event.data.new.first_name }} {{ $body.event.data.new.last_name }}\"\n           }\n         ]\n     }\n   ],\n  \"from\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n  \"reply_to\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n  \"subject\": \"Welcome!\",\n  \"content\":\n    [\n      {\n        \"type\": \"text/html\",\n        \"value\": \"<p>{{ $body.event.data.new.first_name }}, welcome to Team Chinook!</p>\"\n      }\n    ]\n}"
-                  },
-                  "method": "POST",
-                  "query_params": {},
-                  "template_engine": "Kriti",
-                  "url": "{{$base_url}}/v3/mail/send",
-                  "version": 2
-                }
-              }
             ]
           }
         ],
-        "logical_models": [
+        "event_triggers": [
+          {
+            "name": "goodbye",
+            "definition": {
+              "delete": {
+                "columns": "*"
+              },
+              "enable_manual": true
+            },
+            "retry_conf": {
+              "interval_sec": 10,
+              "num_retries": 0,
+              "timeout_sec": 60
+            },
+            "webhook": "https://api.sendgrid.com",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value_from_env": "SENDGRID_API_KEY_HEADER"
+              }
+            ],
+            "request_transform": {
+              "body": "{\n  \"personalizations\":\n   [\n     {\n       \"from\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n       \"to\":\n         [\n           {\n             \"email\": {{ $body.event.data.old.email }},\n             \"name\": \"{{ $body.event.data.old.first_name }} {{ $body.event.data.old.last_name }}\"\n           }\n         ]\n     }\n   ],\n  \"from\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n  \"reply_to\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n  \"subject\": \"Goodbye\",\n  \"content\":\n    [\n      {\n        \"type\": \"text/html\",\n        \"value\": \"<p>Goodbye {{ $body.event.data.old.first_name }} we are sad to see you leave!</p><p>We wish you the best in your next chapter!</p>\"\n      }\n    ]\n}",
+              "method": "POST",
+              "query_params": {},
+              "template_engine": "Kriti",
+              "url": "{{$base_url}}/v3/mail/send",
+              "version": 1
+            }
+          },
+          {
+            "name": "welcome",
+            "definition": {
+              "enable_manual": true,
+              "insert": {
+                "columns": "*"
+              }
+            },
+            "retry_conf": {
+              "interval_sec": 10,
+              "num_retries": 0,
+              "timeout_sec": 60
+            },
+            "webhook": "https://api.sendgrid.com",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value_from_env": "SENDGRID_API_KEY_HEADER"
+              }
+            ],
+            "request_transform": {
+              "body": {
+                "action": "transform",
+                "template": "{\n  \"personalizations\":\n   [\n     {\n       \"from\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n       \"to\":\n         [\n           {\n             \"email\": \"{{ $body.event.data.new.email }}\",\n             \"name\": \"{{ $body.event.data.new.first_name }} {{ $body.event.data.new.last_name }}\"\n           }\n         ]\n     }\n   ],\n  \"from\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n  \"reply_to\": { \"email\": \"chris@hasura.io\", \"name\": \"Andrew Adams\" },\n  \"subject\": \"Welcome!\",\n  \"content\":\n    [\n      {\n        \"type\": \"text/html\",\n        \"value\": \"<p>{{ $body.event.data.new.first_name }}, welcome to Team Chinook!</p>\"\n      }\n    ]\n}"
+              },
+              "method": "POST",
+              "query_params": {},
+              "template_engine": "Kriti",
+              "url": "{{$base_url}}/v3/mail/send",
+              "version": 2
+            }
+          }
+        ],
+        "native_queries": [
           {
             "arguments": {},
             "code": "SELECT first_name || ' ' || last_name as name, title, REGEXP_REPLACE(email, '^[A-Za-z0-9._%-]+@', '*****@','g') AS email, TO_CHAR(hire_date, 'YYYY') AS hired FROM employees",
@@ -302,7 +355,7 @@
             "root_field_name": "employee_masked"
           }
         ],
-        "custom_return_types": [
+        "logical_models": [
           {
             "fields": [
               {
@@ -326,16 +379,7 @@
                 "type": "text"
               }
             ],
-            "name": "EmployeeMasked",
-            "select_permissions": [
-              {
-                "permission": {
-                  "columns": "*",
-                  "filter": {}
-                },
-                "role": "anonymous"
-              }
-            ]
+            "name": "EmployeeMasked"
           }
         ],
         "configuration": {
@@ -469,6 +513,15 @@
         "role_set": [
           "employee",
           "org_leader"
+        ]
+      },
+      {
+        "role_name": "dyn_roles",
+        "role_set": [
+          "basic",
+          "address",
+          "personal",
+          "corp"
         ]
       }
     ]
