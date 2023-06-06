@@ -112,4 +112,5 @@ INSERT INTO ad_hoc_manager (id, employee_id, applies_to_org) VALUES (11, 6, true
 INSERT INTO dynamic_permissions (id) VALUES (N'basic');
 INSERT INTO dynamic_permissions (id) VALUES (N'personal');
 INSERT INTO dynamic_permissions (id) VALUES (N'address');
+INSERT INTO dynamic_permissions (id) VALUES (N'corp');
 
